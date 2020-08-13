@@ -9,8 +9,8 @@ namespace MyAgenda.API.Models.Class
         public Usuario Conta { get; set; }
         public Estabelecimento TrabalhaPara { get; set; }
         public List<Servico> Funcoes { get; set; }
-        public DateTime HoraDeEntrada { get; set; } 
-        public DateTime HoraDeSaida { get; set; } 
+        public string ActivoHorarios { get; set; }
+        public string ActivoDiasDaSemana { get; set; }
         public int NivelDePermicao { get; set; }
     }
 }
