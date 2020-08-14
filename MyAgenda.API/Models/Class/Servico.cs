@@ -9,6 +9,6 @@ namespace MyAgenda.API.Models.Class
         public List<Funcionario> Prestadores { get; set; }
         public string Nome { get; set; }
         public decimal Valor { get; set; }
-        public DateTime TempoDeDuracao { get; set; } 
+        public string TempoDeDuracao { get; set; } 
     }
 }
