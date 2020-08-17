@@ -12,10 +12,10 @@ namespace MyAgenda.API.Models.Class
         public string Descricao { get; set; }
         public string FunciomantoHorarios { get; set; }
         public string FunciomantoDiasDaSemana { get; set; }
-        public List<Usuario> UsuariosPermitidos { get; set; }
-        public List<Funcionario> Funcionarios { get; set; }
-        public List<Servico> Servicos { get; set; }
-        public List<Produto> Estoque { get; set; }
-        public List<BlocoDaAgenda> Agenda { get; set; }
+        public ICollection<Usuario> UsuariosPermitidos { get; set; }
+        public ICollection<Funcionario> Funcionarios { get; set; }
+        public ICollection<Servico> Servicos { get; set; }
+        public ICollection<Produto> Estoque { get; set; }
+        public ICollection<BlocoDaAgenda> Agenda { get; set; }
     }
 }

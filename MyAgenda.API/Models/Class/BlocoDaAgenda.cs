@@ -10,10 +10,10 @@ namespace MyAgenda.API.Models.Class
         public string Notas { get; set; }
         public DateTime Comeco { get; set; } 
         public DateTime Fim { get; set; } 
-        public List<Usuario> Clientes { get; set; }
-        public List<Funcionario> Prestadores { get; set; }
-        public List<Servico> Servicos { get; set; }
-        public List<Produto> Cesta { get; set; }
+        public ICollection<UsuarioBlocoDaAgenda> Clientes { get; set; }
+        public ICollection<Funcionario> Prestadores { get; set; }
+        public ICollection<Servico> Servicos { get; set; }
+        public ICollection<Produto> Cesta { get; set; }
         public Estabelecimento Local { get; set; }
     }
 }

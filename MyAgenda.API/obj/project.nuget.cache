@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "tsY0frxIdMshs+nYDUfVgnNY2whoVFyB6ODvJp7MSqFRETsJbQzBAbKCafGeujG7dx91ARy296lAcnTacQ+GYg==",
+  "dgSpecHash": "qmBMy0kVLjHECdijfCGL5rR2S72rudV6dA+FiPvpB+G0gg3IipCgYfbd9PUgA/O3YgIidNb7jgaS9QByLRYxkA==",
   "success": true,
-  "projectFilePath": "c:\\Users\\MGSam\\MyAgenda\\MyAgenda.API\\MyAgenda.API.csproj",
+  "projectFilePath": "C:\\Users\\MGSam\\MyAgendaApp\\MyAgenda.API\\MyAgenda.API.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\MGSam\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\3.1.5\\microsoft.aspnetcore.authentication.jwtbearer.3.1.5.nupkg.sha512",
     "C:\\Users\\MGSam\\.nuget\\packages\\microsoft.bcl.asyncinterfaces\\1.1.0\\microsoft.bcl.asyncinterfaces.1.1.0.nupkg.sha512",

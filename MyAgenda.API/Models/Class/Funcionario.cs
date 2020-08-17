@@ -9,7 +9,7 @@ namespace MyAgenda.API.Models.Class
         public bool Activo { get; set; }
         public Usuario Conta { get; set; }
         public Estabelecimento TrabalhaPara { get; set; }
-        public List<Servico> Funcoes { get; set; }
+        public ICollection<FuncionarioServico> Funcoes { get; set; }
         public string ActivoHorarios { get; set; }
         public string ActivoDiasDaSemana { get; set; }
         public int NivelDePermicao { get; set; }

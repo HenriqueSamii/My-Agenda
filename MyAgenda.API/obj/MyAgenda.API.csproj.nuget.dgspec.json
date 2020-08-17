@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "c:\\Users\\MGSam\\MyAgenda\\MyAgenda.API\\MyAgenda.API.csproj": {}
+    "C:\\Users\\MGSam\\MyAgendaApp\\MyAgenda.API\\MyAgenda.API.csproj": {}
   },
   "projects": {
-    "c:\\Users\\MGSam\\MyAgenda\\MyAgenda.API\\MyAgenda.API.csproj": {
+    "C:\\Users\\MGSam\\MyAgendaApp\\MyAgenda.API\\MyAgenda.API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "c:\\Users\\MGSam\\MyAgenda\\MyAgenda.API\\MyAgenda.API.csproj",
+        "projectUniqueName": "C:\\Users\\MGSam\\MyAgendaApp\\MyAgenda.API\\MyAgenda.API.csproj",
         "projectName": "MyAgenda.API",
-        "projectPath": "c:\\Users\\MGSam\\MyAgenda\\MyAgenda.API\\MyAgenda.API.csproj",
+        "projectPath": "C:\\Users\\MGSam\\MyAgendaApp\\MyAgenda.API\\MyAgenda.API.csproj",
         "packagesPath": "C:\\Users\\MGSam\\.nuget\\packages\\",
-        "outputPath": "c:\\Users\\MGSam\\MyAgenda\\MyAgenda.API\\obj\\",
+        "outputPath": "C:\\Users\\MGSam\\MyAgendaApp\\MyAgenda.API\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\MGSam\\AppData\\Roaming\\NuGet\\NuGet.Config"

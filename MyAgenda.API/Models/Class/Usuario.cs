@@ -10,8 +10,8 @@ namespace MyAgenda.API.Models.Class
         public byte[] PasswordHash { get; set; }
         public byte[] PasswordSalt { get; set; }
         public string Email { get; set; }
-        public List<BlocoDaAgenda> Agenda { get; set; }
-        public List<Estabelecimento> MeusEstabelecimentos { get; set; }
-        public List<Funcionario> FuncionarioDe { get; set; }
+        public ICollection<UsuarioBlocoDaAgenda> Agenda { get; set; }
+        public ICollection<Estabelecimento> MeusEstabelecimentos { get; set; }
+        public ICollection<Funcionario> FuncionarioDe { get; set; }
     }
 }
