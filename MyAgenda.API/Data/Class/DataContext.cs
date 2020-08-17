@@ -9,10 +9,6 @@ namespace MyAgenda.API.Data.Class
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             /// Entity Framework Builder
-            // modelBuilder.Entity<Post>()
-            //     .HasOne(p => p.Blog)
-            //     .WithMany(b => b.Posts);
-
             //BlocoDaAgenda
             modelBuilder.Entity<BlocoDaAgenda>()
                 .HasMany(p => p.Clientes)

@@ -1,13 +1,16 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace MyAgenda.API.Models.Class
 {
     public class Estabelecimento
     {
         public Guid Id { get; set; }
+        [Required]
         public Usuario Dono { get; set; }
         public bool Privado { get; set; }
+        [Required]
         public string Nome { get; set; }
         public string Descricao { get; set; }
         public string FunciomantoHorarios { get; set; }
