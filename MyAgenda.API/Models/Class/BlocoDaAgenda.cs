@@ -5,7 +5,7 @@ namespace MyAgenda.API.Models.Class
 {
     public class BlocoDaAgenda
     {
-        public Guid Id { get; set; }
+        public int Id { get; set; }
         public bool Cancelado { get; set; }
         public string Notas { get; set; }
         public DateTime Comeco { get; set; } 

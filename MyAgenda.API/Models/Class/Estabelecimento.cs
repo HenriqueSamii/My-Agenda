@@ -6,7 +6,7 @@ namespace MyAgenda.API.Models.Class
 {
     public class Estabelecimento
     {
-        public Guid Id { get; set; }
+        public int Id { get; set; }
         [Required]
         public Usuario Dono { get; set; }
         public bool Privado { get; set; }
