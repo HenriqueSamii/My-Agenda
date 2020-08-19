@@ -13,9 +13,9 @@ namespace MyAgenda.API.Data.Class
             this.context = context;
             
         }
-        public async Task<Usuario> Login(string name, string password)
+        public async Task<Usuario> Login(string email, string password)
         {
-            var user = await this.context.Usuarios.FirstOrDefaultAsync(x => x.Username == name);
+            var user = await this.context.Usuarios.FirstOrDefaultAsync(x => x.Email == email);
 
             if (user == null)
             {
@@ -68,9 +68,9 @@ namespace MyAgenda.API.Data.Class
             }
         }
 
-        public async Task<bool> UserExists(string name)
+        public async Task<bool> UserExists(string email)
         {
-            if (await this.context.Usuarios.AnyAsync(x => x.Username == name))
+            if (await this.context.Usuarios.AnyAsync(x => x.Email == email))
             {
                 return true;
             }

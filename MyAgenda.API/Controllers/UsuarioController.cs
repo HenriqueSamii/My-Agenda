@@ -12,7 +12,7 @@ namespace MyAgenda.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UsuarioController
+    public class UsuarioController : ControllerBase
     {
         private readonly IUsuarioRepository repo;
         private readonly IConfiguration config;

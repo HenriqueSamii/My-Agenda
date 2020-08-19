@@ -7,12 +7,14 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using MyAgenda.API.Data.Interface;
+using MyAgenda.API.Dtos;
+using MyAgenda.API.Models.Class;
 
 namespace MyAgenda.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AutenticacaoController
+    public class AutenticacaoController : ControllerBase
     {
         private readonly IAuthRepository repo;
         private readonly IConfiguration config;
@@ -23,24 +25,24 @@ namespace MyAgenda.API.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Resister(UserForRegisterDto userForRegisterDto)
+        public async Task<IActionResult> Resister(UsuarioParaRegistroDto usuarioParaRegistroDto)
         {
             //validate request
-            userForRegisterDto.Username = userForRegisterDto.Username.ToLower();
-            if (await repo.UserExists(userForRegisterDto.Username))
+            usuarioParaRegistroDto.Username = usuarioParaRegistroDto.Username.ToLower();
+            if (await repo.UserExists(usuarioParaRegistroDto.Email))
             {
-                return BadRequest("Username already exists");
+                return BadRequest("Este E-mail já foi cadastrado");
             }
-            var userToCreate = new User { Username = userForRegisterDto.Username };
-            var createdUser = await this.repo.Register(userToCreate, userForRegisterDto.Password);
+            var userToCreate = new Usuario { Username = usuarioParaRegistroDto.Username, Email = usuarioParaRegistroDto.Email};
+            var createdUser = await this.repo.Register(userToCreate, usuarioParaRegistroDto.Password);
 
             return StatusCode(201);
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login(UserForLoginDto userForLoginDto)
+        public async Task<IActionResult> Login(UsuarioParaLoginDto usuarioParaLoginDto)
         {
-            var userFromRepo = await this.repo.Login(userForLoginDto.Username.ToLower(), userForLoginDto.Password);
+            var userFromRepo = await this.repo.Login(usuarioParaLoginDto.Email.ToLower(), usuarioParaLoginDto.Password);
 
             if (userFromRepo == null)
             {
@@ -48,7 +50,8 @@ namespace MyAgenda.API.Controllers
             }
             var claims = new[]{
                 new Claim(ClaimTypes.NameIdentifier, userFromRepo.Id.ToString()),
-                new Claim(ClaimTypes.Name, userFromRepo.Username)
+                new Claim(ClaimTypes.Name, userFromRepo.Username),
+                 new Claim(ClaimTypes.Email, userFromRepo.Email),
             };
 
             var key = new SymmetricSecurityKey(

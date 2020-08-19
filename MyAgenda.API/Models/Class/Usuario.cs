@@ -14,6 +14,7 @@ namespace MyAgenda.API.Models.Class
         [Required]
         public byte[] PasswordSalt { get; set; }
         [Required]
+        [EmailAddress]
         public string Email { get; set; }
         public ICollection<UsuarioBlocoDaAgenda> Agenda { get; set; }
         public ICollection<Estabelecimento> MeusEstabelecimentos { get; set; }
