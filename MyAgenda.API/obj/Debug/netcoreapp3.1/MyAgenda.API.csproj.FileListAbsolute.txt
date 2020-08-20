@@ -65,3 +65,6 @@ C:\Users\MGSam\MyAgendaApp\MyAgenda.API\obj\Debug\netcoreapp3.1\staticwebassets\
 C:\Users\MGSam\MyAgendaApp\MyAgenda.API\obj\Debug\netcoreapp3.1\MyAgenda.API.dll
 C:\Users\MGSam\MyAgendaApp\MyAgenda.API\obj\Debug\netcoreapp3.1\MyAgenda.API.pdb
 C:\Users\MGSam\MyAgendaApp\MyAgenda.API\obj\Debug\netcoreapp3.1\MyAgenda.API.genruntimeconfig.cache
+C:\Users\MGSam\MyAgendaApp\MyAgenda.API\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.JsonPatch.dll
+C:\Users\MGSam\MyAgendaApp\MyAgenda.API\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll
+C:\Users\MGSam\MyAgendaApp\MyAgenda.API\bin\Debug\netcoreapp3.1\Newtonsoft.Json.Bson.dll
