@@ -1,4 +1,6 @@
-using System.Collections.Generic;using System.Threading.Tasks;
+using System.Collections.Generic;
+using System.Security.Claims;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -28,19 +30,22 @@ namespace MyAgenda.API.Controllers
         [HttpGet("home")]
         public async Task<IActionResult> Home()
         {
-            var usuarioRep = await ContaUsuarioLogado(1);
+            // var usuarioRep = await ContaUsuarioLogado(1);
+            var claimsIdentity = this.User.Identity as ClaimsIdentity;
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var usuarioRep = await ContaUsuarioLogado(int.Parse(userId));
             return Ok(new{ usuario = usuarioRep});
         }
         //[AllowAnonymous]
-        [HttpGet("todos")]
-        public async Task<IActionResult> TodosUsuarios()
-        {
-            var usuariosRep = await TodosUsuariosR();
-            return Ok(new{ usuarios = usuariosRep});
-        }
+        // [HttpGet("todos")]
+        // public async Task<IActionResult> TodosUsuarios()
+        // {
+        //     var usuariosRep = await TodosUsuariosR();
+        //     return Ok(new{ usuarios = usuariosRep});
+        // }
 
 
-        /////////////////////// TODO: Porra do repositorio de usuario nao quer funcionar, ver isso depos //////////////////////////////
+        /////////////////////// TODO: Raios que o partam do repositorio de usuario nao quer funcionar, ver isso depos //////////////////////////////
         public async Task<Usuario> ContaUsuarioLogado(int id)
         {
             var x = await this.context.Usuarios.FirstOrDefaultAsync(x => x.Id == id); 
