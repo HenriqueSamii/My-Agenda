@@ -30,13 +30,18 @@ namespace MyAgenda.API.Controllers
         [HttpGet("home")]
         public async Task<IActionResult> Home()
         {
-            // var usuarioRep = await ContaUsuarioLogado(1);
-            var claimsIdentity = this.User.Identity as ClaimsIdentity;
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            // var claimsIdentity = this.User.Identity as ClaimsIdentity;
+            // ClaimsPrincipal currentUser = this.User;
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId == null || userId == "")
+            {
+                return BadRequest("Erro, porblema com token - Id não encontrado");
+            }
+
             var usuarioRep = await ContaUsuarioLogado(int.Parse(userId));
             return Ok(new{ usuario = usuarioRep});
         }
-        //[AllowAnonymous]
+        // [AllowAnonymous]
         // [HttpGet("todos")]
         // public async Task<IActionResult> TodosUsuarios()
         // {
