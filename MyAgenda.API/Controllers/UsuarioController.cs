@@ -1,21 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
+using System.Collections.Generic;using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
 using MyAgenda.API.Data.Class;
-using MyAgenda.API.Data.Interface;
-using MyAgenda.API.Dtos;
 using MyAgenda.API.Models.Class;
 
 namespace MyAgenda.API.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class UsuarioController : ControllerBase
@@ -39,7 +31,7 @@ namespace MyAgenda.API.Controllers
             var usuarioRep = await ContaUsuarioLogado(1);
             return Ok(new{ usuario = usuarioRep});
         }
-
+        //[AllowAnonymous]
         [HttpGet("todos")]
         public async Task<IActionResult> TodosUsuarios()
         {
