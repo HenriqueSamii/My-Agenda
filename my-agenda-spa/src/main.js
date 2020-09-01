@@ -4,8 +4,10 @@ import './registerServiceWorker'
 import router from './router'
 import store from './store'
 
-import 'bootstrap/dist/css/bootstrap.css'
+// import '@/assets/css/main.css'
+// import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
+import 'bootstrap/dist/css/bootstrap.min.css'
 
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 

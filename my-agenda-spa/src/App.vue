@@ -23,16 +23,18 @@ export default {
 </script>
 
 <style>
-#app{
-  background-image: url("./assets/dungeonWall.jpg");
-  background-repeat: repeat;
+ #app{
+  /* background-image: url("./assets/dungeonWall.jpg");
+  background-repeat: repeat; */
   width:100%; 
   margin:0;
+  margin-top: 3.5em;
+  background-color:  rgb(243, 243, 243) ;/*#f4c430;c4d0c4;*/
 }
 #corpo{
   width: 90%;
   margin:0 auto;
-  background-color: #848881;
+  background-color: #d6d6c5; 
   padding-bottom: 2em;
 }
 </style>
