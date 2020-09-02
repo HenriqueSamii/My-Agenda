@@ -6,7 +6,7 @@
       <div v-if="!isLogin" class="form-group">
         <label for="exampleInputEmail1">Nome</label>
         <input
-          v-model="nome"
+          v-model="usu.username"
           ref="nome"
           type="text"
           class="form-control"
@@ -19,7 +19,7 @@
       <div class="form-group">
         <label for="exampleInputEmail1">Email</label>
         <input
-          v-model="email"
+          v-model="usu.email"
           ref="email"
           type="email"
           class="form-control"
@@ -32,7 +32,7 @@
       <div class="form-group">
         <label for="exampleInputPassword1">Password</label>
         <input
-          v-model="password"
+          v-model="usu.password"
           ref="password"
           type="password"
           class="form-control"
@@ -49,6 +49,8 @@
 
 <script>
 import { mapActions } from "vuex";
+import Usu from "@/services/usuarios";
+//import { AxiosResponse, AxiosError } from 'axios'
 //import { mapGetters, mapActions } from "vuex";
 export default {
   name: "loginECreate",
@@ -59,9 +61,11 @@ export default {
   data: function() {
     return {
       erro: "",
-      email: "",
-      password: "",
-      nome: ""
+      usu:{
+        email: "",
+        password: "",
+        username: ""
+      },
     };
   },
   methods: {
@@ -75,38 +79,33 @@ export default {
       }
     },
     metodoLogin: function() {
-      //TODO: Fazer funcao de Login
-      //console.log(this.$refs.email.value + " " + this.$refs.password.value + " login");
-      if (this.$store.getters.usuarioEmailExists(this.email)) {
-        let user = this.$store.getters.usuarioByEmail(this.email);
-        if (user.password == this.password) {
-          this.login(user.id);
-          this.$router.push({ name: "Home" });
+      //this.erro = "Usuario nao existe";
+      Usu.logar(this.usu).then(resposta => {
+        this.login(resposta);
+        this.$router.push({ name: "Home" });
+      })
+      .catch((reason) => {
+        if (reason.status === 400) {
+          this.erro = "Dados inorrectos, tente novamente"
         } else {
-          this.erro = "Passwor errada";
+          this.erro = "Erro interno, tente mais tarde"
         }
-      } else {
-        this.erro = "Usuario nao existe";
-      }
+        //console.log(reason.message)
+      });
     },
     metodoCriarConta: function() {
-      //TODO: Fazer funcao de Criar Conta
-      //console.log(this.$refs.email.value + " " + this.$refs.password.value + " criar conta");
-      if (this.$store.getters.usuarioEmailExists(this.email)) {
-        this.erro = "Esse email ja esta sendo uasdo";
-      } else {
-        this.createUsuario({
-          id: 0,
-          nome: this.nome,
-          email: this.email,
-          password: this.password
-        });
-        this.nome = "";
-        this.email = "";
-        this.password = "";
-        this.erro = "Usuario criado com sucesso";
-        //this.$router.push({ name: "Home" });
-      }
+      Usu.criar(this.usu).then(resposta => {
+        this.erro = "Usuario criado ";
+        console.log(resposta)
+      })
+      .catch((reason) => {
+        if (reason.status === 400) {
+          this.erro = "Dados inorrectos, tente novamente"
+        } else {
+          this.erro = "Erro interno, tente mais tarde"
+        }
+        //console.log(reason.message)
+      });
     }
   }
 };

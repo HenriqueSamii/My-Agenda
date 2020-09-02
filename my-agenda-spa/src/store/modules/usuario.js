@@ -34,18 +34,18 @@ const mutations = {
     // }
 };
 const actions = {
-    // login({
-    //     commit
-    // }, id) {
-    //     commit('setUsuarioLogadoId', {
-    //         id
-    //     })
-    // },
-    // logout({
-    //     commit
-    // }) {
-    //     commit('deleteUsuarioLogadoId')
-    // },
+    login({
+        commit
+    }, id) {
+        commit('setUsuarioLogadoId', {
+            id
+        })
+    },
+    logout({
+        commit
+    }) {
+        commit('deleteUsuarioLogadoId')
+    },
     // ////////////////////////////
     // createUsuario({
     //     commit
