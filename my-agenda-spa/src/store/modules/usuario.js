@@ -7,6 +7,9 @@ const getters = {
             return true
         }
         return false
+    },
+    usuarioKey: (state) => {
+        return state.usuarioLogadoId
     }
 };
 const mutations = {

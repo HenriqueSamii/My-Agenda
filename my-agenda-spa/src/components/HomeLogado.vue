@@ -8,27 +8,43 @@
       type="submit"
       v-if="isUsuarioLogado"
       :to="{name:'CriarPost' }"
-    >Criar Post</router-link> -->
-    <!-- <div class="cardList">
-      <div class="carde" v-for="post of this.allPosts" :key="post">
-        <CardPost v-bind:postContent="post" />
+    >Criar agendamento pessoal</router-link> -->
+    <div class="cardList">
+      <div class="carde" v-for="post of this.agendaUsu" :key="post">
+        <CardBlocoDaAgendaSimples v-bind:agendaContent="post" />
       </div>
-    </div> -->
+    </div>
   </div>
 </template>
 
 <script>
-// import { mapGetters } from "vuex";
-// import CardPost from "@/components/CardPost.vue";
+import { mapGetters } from "vuex";
+import UsuariosBlocosDaAgenda from "@/services/blocoDaAgenda";
+import CardBlocoDaAgendaSimples from "@/components/CardBlocoDaAgendaSimples.vue";
 export default {
   name: "HomeLogado",
   data: function(){
-    return{};
+    return{
+      agendaUsu:[]
+    };
   },computed: {
-    // ...mapGetters(["getUsuarioLogado","usuarioById","allPosts","isUsuarioLogado"])
+    ...mapGetters(["usuarioKey"])
+  },
+  mounted(){
+    UsuariosBlocosDaAgenda.home(this.usuarioKey).then((result) => {
+      var agendaOrdenadada = result.Agenda
+
+      function custom_sort(a, b) {
+        return new Date(a.BlocoDaAgenda.Comeco).getTime() - new Date(b.BlocoDaAgenda.Comeco).getTime();
+      }
+
+      this.agendaUsu = agendaOrdenadada.sort(custom_sort);
+    }).catch((err) => {
+      console.log(err)
+    });
   },
   components: {
-    // CardPost
+    CardBlocoDaAgendaSimples
   }
 };
 </script>
