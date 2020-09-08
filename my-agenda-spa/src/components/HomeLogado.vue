@@ -1,6 +1,6 @@
 <template>
   <div id="homeLogado">
-    <h1>Voce logou, vai trabalhar no resto</h1>
+    <!-- <h1>Voce logou, vai trabalhar no resto</h1> -->
     <!-- <h1>Bem vido {{this.usuarioById(this.getUsuarioLogado).nome}}</h1> -->
     <!-- <router-link
       tag="button"

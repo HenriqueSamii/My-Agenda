@@ -1,6 +1,12 @@
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using MyAgenda.API.Data.Class;
+using MyAgenda.API.Models.Class;
 
 namespace MyAgenda.API.Controllers
 {
@@ -39,7 +45,7 @@ namespace MyAgenda.API.Controllers
 
         /////////////////////// TODO: Raios que o partam do repositorio nao quer funcionar, ver isso depos //////////////////////////////
         public IQueryable<UsuarioBlocoDaAgenda> GetAllUsuariosBlocosDaAgenda(){
-            return rhis.context.UsuariosBlocosDaAgenda.AsQueryable(); 
+            return this.context.UsuariosBlocosDaAgenda.AsQueryable(); 
         }
 
         public async Task<ICollection<UsuarioBlocoDaAgenda>> AgendaDeUsuarioLogado(int id)

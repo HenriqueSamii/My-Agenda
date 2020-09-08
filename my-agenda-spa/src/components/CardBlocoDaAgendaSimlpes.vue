@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="card">
-      <h2 class="card-title">Data: {{this.agendaContent.dataDeCriacao}}</h2>
+      <h2 class="card-title">Data: {{this.agendaContent.BlocoDaAgenda.Comeco}}</h2>
       <div class="card-body">
         <p class="card-text sideText">Cliente: {{usuarioById(this.agendaContent.Usuario.Email)}}</p>
         <p class="card-text sideText">Prestador: {{usuarioById(this.agendaContent.BlocoDaAgenda.Prestadores[0].Conta.Email)}}</p>

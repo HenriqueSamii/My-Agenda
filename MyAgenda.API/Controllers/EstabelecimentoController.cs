@@ -1,6 +1,13 @@
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using MyAgenda.API.Data.Class;
+using MyAgenda.API.Dtos;
+using MyAgenda.API.Models.Class;
 
 namespace MyAgenda.API.Controllers
 {
@@ -22,7 +29,76 @@ namespace MyAgenda.API.Controllers
             this.context = context;
         }
 
+        [HttpGet("meus")]
+        public async Task<IActionResult> Home()
+        {
+            // var claimsIdentity = this.User.Identity as ClaimsIdentity;
+            // ClaimsPrincipal currentUser = this.User;
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId == null || userId == "")
+            {
+                return BadRequest("Erro, porblema com token - Id não encontrado");
+            }
+
+            var usuarioRep = await EstabelecimentosDeUsuarioLogado(int.Parse(userId));
+            return Ok(new{ usuariosBlocosDaAgenda = usuarioRep});
+        }
+        [HttpGet("{nome}")]
+        public async Task<IActionResult> EstabelecimentoPorNome(string nome)
+        {
+            var usuarioRep = await EstabelecimentoNome(nome);
+            if (usuarioRep == null)
+            {
+                return BadRequest("Erro, estabelecimento nao existe");
+            }
+            return Ok(new{ usuariosBlocosDaAgenda = usuarioRep});
+        }
+
+        [HttpPost("novo")]
+        public async Task<IActionResult> NovoEstabelecimento(EstabelecimentoDto usuarioParaRegistroDto)
+        {
+            if (await EstabelecimentoNome(usuarioParaRegistroDto.Nome) != null)
+            {
+                return BadRequest("Estabelecimento com este nome já foi cadastrado");
+            }
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId == null || userId == "")
+            {
+                return BadRequest("Erro, porblema com token - Id não encontrado");
+            }
+            var usuarioCriador = UasuarioId(int.Parse(userId));
+
+            var criarEstabelecimento = await this.repo.Register(userToCreate, usuarioParaRegistroDto.Password);
+
+            return StatusCode(201);
+        }
+
         /////////////////////// TODO: Raios que o partam do repositorio nao quer funcionar, ver isso depos //////////////////////////////
-        
+        public IQueryable<Estabelecimento> GetAllEstabelecimentos(){
+            return this.context.Estabelecimentos.AsQueryable(); 
+        }
+
+        public async Task<ICollection<Estabelecimento>> EstabelecimentosDeUsuarioLogado(int id)
+        {
+            var x = await GetAllEstabelecimentos().Where(x => x.Dono.Id == id).ToListAsync(); 
+            return x;
+        }
+        public async Task<Estabelecimento> EstabelecimentoNome(string nome)
+        {
+            var x = await this.context.Estabelecimentos.FirstOrDefaultAsync(x => x.Nome == nome); 
+            return x;
+        }
+
+        public async Task<Estabelecimento> EstabelecimentoId(int id)
+        {
+            var x = await this.context.Estabelecimentos.FirstOrDefaultAsync(x => x.Id == id); 
+            return x;
+        }
+
+        public async Task<Usuario> UasuarioId(int id)
+        {
+            var x = await this.context.Usuarios.FirstOrDefaultAsync(x => x.Id == id); 
+            return x;
+        }
     }
 }
