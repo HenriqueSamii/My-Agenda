@@ -19,7 +19,7 @@
 
 <script>
 import { mapGetters } from "vuex";
-import UsuariosBlocosDaAgenda from "@/services/blocoDaAgenda";
+import UsuariosBlocosDaAgenda from "@/services/blocoAgenda";
 import CardBlocoDaAgendaSimples from "@/components/CardBlocoDaAgendaSimples.vue";
 export default {
   name: "HomeLogado",

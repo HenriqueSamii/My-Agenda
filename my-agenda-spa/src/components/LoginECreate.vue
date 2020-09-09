@@ -81,7 +81,8 @@ export default {
     metodoLogin: function() {
       //this.erro = "Usuario nao existe";
       Usu.logar(this.usu).then(resposta => {
-        this.login(resposta);
+        this.login(resposta.data['token']);
+        //console.log(resposta.data['token'])
         this.$router.push({ name: "Home" });
       })
       .catch((reason) => {

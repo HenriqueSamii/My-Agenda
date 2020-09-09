@@ -4,7 +4,6 @@ import Home from '../views/Home.vue'
 import Login from '../views/Login.vue'
 import CriarConta from '../views/CriarConta.vue'
 import Afiliacoes from '../views/Afiliacoes.vue'
-import MeusNegocios from '../views/MeusNegocios.vue'
 import Agendamento from '../views/Agendamento.vue'
 import CriarEstabelecimento from '../views/CriarEstabelecimento.vue'
 import CriarFuncionario from '../views/CriarFuncionario.vue'
@@ -35,9 +34,9 @@ Vue.use(VueRouter)
     component: Afiliacoes
   },
   {
-    path: '/MeusNegocios',
-    name: 'MeusNegocios',
-    component: MeusNegocios
+    path: '/MeusEstabelecimentos',
+    name: 'MeusEstabelecimentos',
+    component: MeusEstabelecimentos
   },
   {
     path: '/agendamento/:negocio',

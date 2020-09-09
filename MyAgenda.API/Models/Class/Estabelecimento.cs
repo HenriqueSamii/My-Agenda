@@ -7,7 +7,7 @@ namespace MyAgenda.API.Models.Class
     public class Estabelecimento
     {
         public int Id { get; set; }
-        [Required]
+        // [Required]
         public Usuario Dono { get; set; }
         public bool Privado { get; set; }
         [Required]

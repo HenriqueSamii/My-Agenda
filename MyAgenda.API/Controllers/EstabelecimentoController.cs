@@ -66,9 +66,13 @@ namespace MyAgenda.API.Controllers
             {
                 return BadRequest("Erro, porblema com token - Id não encontrado");
             }
-            var usuarioCriador = UasuarioId(int.Parse(userId));
+            //var usuarioCriador = UasuarioId(int.Parse(userId));
+            var estaNovo = new Estabelecimento();
+            //estaNovo.Dono = usuarioCriador.Result;
+            estaNovo.Nome = usuarioParaRegistroDto.Nome;
+            estaNovo.Descricao = usuarioParaRegistroDto.Descricao;
 
-            var criarEstabelecimento = await this.repo.Register(userToCreate, usuarioParaRegistroDto.Password);
+            var criarEsta = await this.CriarEstabelecimento(estaNovo,int.Parse(userId));
 
             return StatusCode(201);
         }
@@ -99,6 +103,14 @@ namespace MyAgenda.API.Controllers
         {
             var x = await this.context.Usuarios.FirstOrDefaultAsync(x => x.Id == id); 
             return x;
+        }
+
+        public async Task<Estabelecimento> CriarEstabelecimento(Estabelecimento esta,int id)
+        {
+            var y = await this.context.Usuarios.FirstOrDefaultAsync(x => x.Id == id);
+            y.MeusEstabelecimentos.Add(esta);
+            await this.context.SaveChangesAsync();
+            return esta;
         }
     }
 }
