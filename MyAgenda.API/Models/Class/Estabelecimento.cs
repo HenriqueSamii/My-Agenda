@@ -10,7 +10,7 @@ namespace MyAgenda.API.Models.Class
         // [Required]
         public Usuario Dono { get; set; }
         public bool Privado { get; set; }
-        [Required]
+        //[Required]
         public string Nome { get; set; }
         public string Descricao { get; set; }
         public string FunciomantoHorarios { get; set; }

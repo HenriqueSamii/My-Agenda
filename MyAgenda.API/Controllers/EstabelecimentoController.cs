@@ -55,9 +55,10 @@ namespace MyAgenda.API.Controllers
         }
 
         [HttpPost("novo")]
-        public async Task<IActionResult> NovoEstabelecimento(EstabelecimentoDto usuarioParaRegistroDto)
+        public async Task<IActionResult> Novo([FromBody] EstabelecimentoDto estabelecimentoDto)
         {
-            if (await EstabelecimentoNome(usuarioParaRegistroDto.Nome) != null)
+            System.Console.WriteLine(estabelecimentoDto);
+            if (await EstabelecimentoNome(estabelecimentoDto.Nome) != null)
             {
                 return BadRequest("Estabelecimento com este nome já foi cadastrado");
             }
@@ -66,13 +67,8 @@ namespace MyAgenda.API.Controllers
             {
                 return BadRequest("Erro, porblema com token - Id não encontrado");
             }
-            //var usuarioCriador = UasuarioId(int.Parse(userId));
-            var estaNovo = new Estabelecimento();
-            //estaNovo.Dono = usuarioCriador.Result;
-            estaNovo.Nome = usuarioParaRegistroDto.Nome;
-            estaNovo.Descricao = usuarioParaRegistroDto.Descricao;
-
-            var criarEsta = await this.CriarEstabelecimento(estaNovo,int.Parse(userId));
+            //System.Console.WriteLine(usuarioParaRegistroDto.Nome);
+            await this.CriarEstabelecimento(estabelecimentoDto,int.Parse(userId));
 
             return StatusCode(201);
         }
@@ -105,12 +101,15 @@ namespace MyAgenda.API.Controllers
             return x;
         }
 
-        public async Task<Estabelecimento> CriarEstabelecimento(Estabelecimento esta,int id)
+        public async Task<Estabelecimento> CriarEstabelecimento(EstabelecimentoDto esta,int id)
         {
-            var y = await this.context.Usuarios.FirstOrDefaultAsync(x => x.Id == id);
-            y.MeusEstabelecimentos.Add(esta);
+            var dono = await this.context.Usuarios.FirstOrDefaultAsync(x => x.Id == id);
+            var estaNovo = new Estabelecimento{Nome = esta.Nome,Descricao= esta.Descricao, Dono=dono};
+            await this.context.Estabelecimentos.AddAsync(estaNovo);
+            var x = await this.context.Estabelecimentos.FirstOrDefaultAsync(x => x.Nome == estaNovo.Nome); 
+            dono.MeusEstabelecimentos.Add(estaNovo);
             await this.context.SaveChangesAsync();
-            return esta;
+            return x;
         }
     }
 }

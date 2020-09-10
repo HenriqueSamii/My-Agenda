@@ -4,9 +4,9 @@ namespace MyAgenda.API.Dtos
 {
     public class EstabelecimentoDto
     {
-        [Required]
+        //[Required]
         public string Nome { get; set; }
-        [Required]
+        //[Required]
         public string Descricao { get; set; }
         //public string FunciomantoHorarios { get; set; }
         //public string FunciomantoDiasDaSemana { get; set; }

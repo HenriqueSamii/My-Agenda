@@ -1,5 +1,5 @@
 <template>
-  <div id="loginECreate">
+  <div id="criarEstabelecimento">
     <h1>Novo Estabelecimeno</h1>
     <p v-if="erro != '' || erro != null">{{erro}}</p>
     <form v-on:submit.prevent="metodoCriarEstabelecimento">
@@ -38,11 +38,7 @@
 import { mapGetters } from "vuex";
 import Esta from "@/services/estabelecimento";
 export default {
-  name: "loginECreate",
-  props: {
-    pageTitle: String,
-    isLogin: Boolean
-  },
+  name: "criarEstabelecimento",
   data: function() {
     return {
       erro: "",
