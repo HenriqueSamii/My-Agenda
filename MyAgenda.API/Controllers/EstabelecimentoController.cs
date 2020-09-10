@@ -30,7 +30,7 @@ namespace MyAgenda.API.Controllers
         }
 
         [HttpGet("meus")]
-        public async Task<IActionResult> Home()
+        public async Task<IActionResult> Meus()
         {
             // var claimsIdentity = this.User.Identity as ClaimsIdentity;
             // ClaimsPrincipal currentUser = this.User;

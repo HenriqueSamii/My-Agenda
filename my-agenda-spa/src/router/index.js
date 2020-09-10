@@ -9,6 +9,7 @@ import CriarEstabelecimento from '../views/CriarEstabelecimento.vue'
 import CriarFuncionario from '../views/CriarFuncionario.vue'
 import MeusEstabelecimentos from '../views/MeusEstabelecimentos.vue'
 import Estabelecimento from '../views/Estabelecimento.vue'
+import EstabelecimentoAgenda from '../views/EstabelecimentoAgenda.vue'
 
 Vue.use(VueRouter)
 
@@ -62,6 +63,11 @@ Vue.use(VueRouter)
     path: '/estabelecimento/:nome',
     name: 'Estabelecimento',
     component: Estabelecimento,
+  },
+  {
+    path: '/estabelecimento/agenda',
+    name: 'EstabelecimentoAgenda',
+    component: EstabelecimentoAgenda,
   },
 ]
 
