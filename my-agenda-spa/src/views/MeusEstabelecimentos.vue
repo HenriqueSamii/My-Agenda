@@ -33,7 +33,7 @@ export default {
 
       // this.agendaUsu = agendaOrdenadada.sort(custom_sort);
       this.agendaUsu = agendaOrdenadada;
-      console.log(this.agendaUsu[0])
+      //console.log(this.agendaUsu[0])
     }).catch((err) => {
       console.log(err)
     });

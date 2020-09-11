@@ -23,4 +23,14 @@ export default {
             }
          })
     },
+    estabelecimentosPorId:(token,id) => {
+      //  return axios({ method: 'get', url: localhost+"estabelecimento/agenda", params: { numero: id},headers: {
+      //    Authorization: `Bearer ${token}`
+      // }})
+      return axios.get(localhost+"estabelecimento/agenda/"+ id, {
+          headers: {
+             Authorization: `Bearer ${token}`
+          }
+       })
+    },
 }

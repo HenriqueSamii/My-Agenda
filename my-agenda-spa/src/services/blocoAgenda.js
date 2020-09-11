@@ -1,10 +1,11 @@
-import {http} from "./config"
+import {localhost} from "./config"
+import axios from 'axios'
 
 export default {
     home:(token) => {
-        return http.get("BlocoDaAgenda/home", {
+        return axios.get(localhost+"BlocoDaAgenda/home", {
             headers: {
-               'Authorization': 'Bearer ' + token,
+               Authorization: `Bearer ${token}`
             }
          })
     },

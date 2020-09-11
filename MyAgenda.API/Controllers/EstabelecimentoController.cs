@@ -43,6 +43,17 @@ namespace MyAgenda.API.Controllers
             var usuarioRep = await EstabelecimentosDeUsuarioLogado(int.Parse(userId));
             return Ok(new{ usuariosBlocosDaAgenda = usuarioRep});
         }
+        //[AllowAnonymous]
+        [HttpGet("agenda/{numero}")]
+        public async Task<IActionResult> EstabelecimentoPorId(int numero)
+        {
+            var usuarioRep = await EstabelecimentoId(numero);
+            if (usuarioRep == null)
+            {
+                return BadRequest("Erro, porblema com estabelecimento - Id não encontrado");
+            }
+            return Ok(new{ estabelecimentoPorId = usuarioRep});
+        }
         [HttpGet("{nome}")]
         public async Task<IActionResult> EstabelecimentoPorNome(string nome)
         {

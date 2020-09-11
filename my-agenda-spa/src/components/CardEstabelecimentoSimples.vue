@@ -11,14 +11,14 @@
           tag="button"
           class="btn btn-primary"
           type="submit"
-          :to="{name:'EstabelecimentoAgenda', params: { idEsta: this.estabelecimentoContent.id } }"
+          :to="{name:'CriarFuncionario', params: { id: this.estabelecimentoContent.id } }"
         >Criar Funcionario</router-link>
         <router-link
           style="margin:0.5em;"
           tag="button"
           class="btn btn-primary"
           type="submit"
-          :to="{name:'EstabelecimentoAgenda', params: { idEsta: this.estabelecimentoContent.id } }"
+          :to="{name:'EstabelecimentoAgenda', params: { id: this.estabelecimentoContent.id } }"
         >Ver Agenda</router-link>
       </dir>
     </div>
@@ -39,7 +39,7 @@ export default {
     // ...mapGetters(["usuarioKey"])
   },
   mounted(){
-    console.log(this.estabelecimentoContent)
+    //console.log(this.estabelecimentoContent)
   },
   methods: {
     // criarFuncionario: function() {
