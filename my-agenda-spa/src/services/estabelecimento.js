@@ -33,4 +33,11 @@ export default {
           }
        })
     },
+    criarFuncionarioDeEstabelecimento:(token,estab) => {
+      return axios.post(localhost+'estabelecimento/funcionario/novo',estab, {
+          headers: {
+             Authorization: `Bearer ${token}`
+          }
+       })
+  },
 }

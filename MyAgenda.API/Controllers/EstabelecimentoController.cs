@@ -83,6 +83,18 @@ namespace MyAgenda.API.Controllers
 
             return StatusCode(201);
         }
+        [AllowAnonymous]
+        [HttpPost("funcionario/novo")]
+        public async Task<IActionResult> NovoFuncionario([FromBody] CriarUsuarioComServicoDto criarUsuarioComServicoDto)
+        {
+            //System.Console.WriteLine(criarUsuarioComServicoDto.NomeServico+" "+criarUsuarioComServicoDto.);
+            // int servicoId = await CriarServico(criarUsuarioComServicoDto);
+            //int funcuionarioId = await CriarFuncionario(criarUsuarioComServicoDto);
+            var FuncionarioServico = await CriarfuncionarioServico(criarUsuarioComServicoDto);
+            //await this.CriarFuncionarioDeEstabelecimento(criarUsuarioComServicoDto);
+
+            return StatusCode(201);
+        }
 
         /////////////////////// TODO: Raios que o partam do repositorio nao quer funcionar, ver isso depos //////////////////////////////
         public IQueryable<Estabelecimento> GetAllEstabelecimentos(){
@@ -121,6 +133,80 @@ namespace MyAgenda.API.Controllers
             dono.MeusEstabelecimentos.Add(estaNovo);
             await this.context.SaveChangesAsync();
             return x;
+        }
+
+        // public async Task<Estabelecimento> CriarFuncionarioDeEstabelecimento(CriarUsuarioComServicoDto criarUsuarioComServicoDto)
+        // {
+        //     int servicoId = await CriarServico(criarUsuarioComServicoDto);
+        //     //int funcuionarioId = await CriarFuncionario(criarUsuarioComServicoDto);
+        //     //var funcionarioServico = await CriarfuncionarioServico(servicoId,funcuionarioId);
+
+        //     //FuncionarioServico funcionarioServico = CriarfuncionarioServico(criarUsuarioComServicoDto).Result;
+
+        //     //var usuarioFuncionario = await this.context.Usuarios.FirstOrDefaultAsync(x => x.Email == criarUsuarioComServicoDto.UsurioEmail);
+        //     var estabelecimento = await this.context.Estabelecimentos.FirstOrDefaultAsync(x => x.Id == criarUsuarioComServicoDto.EstabelecimentoId);
+        //     //var servicoFun = await this.context.Servicos.FirstOrDefaultAsync(x => x.Id == servicoId);
+        //     //var novoFuncionario = await this.context.Funcionarios.FirstOrDefaultAsync(x => x.Id == funcuionarioId);
+
+        //     //servicoFun.Prestadores.Add(funcionarioServico);
+        //     //novoFuncionario.Funcoes.Add(funcionarioServico);
+            
+        //     // await this.context.Servicos.AddAsync(servicoFun);
+        //     // await this.context.Funcionarios.AddAsync(novoFuncionario);
+
+        //     // servicoFun = await this.context.Servicos.FirstOrDefaultAsync(x => x.Id == servicoFun.Id);
+        //     // novoFuncionario = await this.context.Funcionarios.FirstOrDefaultAsync(x => x.Id == novoFuncionario.Id);
+
+        //     // FuncionarioServico funcionarioServico = new FuncionarioServico{Servico = servicoFun, Funcionario = novoFuncionario};
+        //     // await this.context.Funcionarios.AddAsync(novoFuncionario);
+            
+        //     // await this.context.SaveChangesAsync();
+
+        //     // novoFuncionario.Funcoes.Add(funcionarioServico);
+        //     // servicoFun.Prestadores.Add(funcionarioServico);
+
+        //     //usuarioFuncionario.FuncionarioDe.Add(novoFuncionario);
+        //     //estabelecimento.Funcionarios.Add(novoFuncionario);
+        //     //estabelecimento.Servicos.Add(servicoFun);
+        //     //await this.context.SaveChangesAsync();
+        //     return estabelecimento;
+        // }
+
+        private async Task<Funcionario> CriarfuncionarioServico(CriarUsuarioComServicoDto criarUsuarioComServicoDto)
+        {
+            Servico servicoFun = new Servico{Nome=criarUsuarioComServicoDto.NomeServico,
+                                            TempoDeDuracao=criarUsuarioComServicoDto.TempoDeDuracao,
+                                            Valor=criarUsuarioComServicoDto.Valor};
+            var usuarioFuncionario = await this.context.Usuarios.FirstOrDefaultAsync(x => x.Email == criarUsuarioComServicoDto.UsurioEmail);
+            var estabelecimento = await this.context.Estabelecimentos.FirstOrDefaultAsync(x => x.Id == criarUsuarioComServicoDto.EstabelecimentoId);
+            Funcionario novoFuncionario = new Funcionario{Activo=true,Conta=usuarioFuncionario,TrabalhaPara=estabelecimento};
+
+            novoFuncionario.Funcoes = new List<FuncionarioServico>{new FuncionarioServico{Servico = servicoFun, Funcionario = novoFuncionario}};
+            await this.context.Funcionarios.AddAsync(novoFuncionario);
+            await this.context.SaveChangesAsync();
+            
+            return null;
+        }
+
+        private async Task<Funcionario>  CriarFuncionario(CriarUsuarioComServicoDto criarUsuarioComServicoDto)
+        {
+            var usuarioFuncionario = await this.context.Usuarios.FirstOrDefaultAsync(x => x.Email == criarUsuarioComServicoDto.UsurioEmail);
+            var estabelecimento = await this.context.Estabelecimentos.FirstOrDefaultAsync(x => x.Id == criarUsuarioComServicoDto.EstabelecimentoId);
+            Funcionario novoFuncionario = new Funcionario{Activo=true,Conta=usuarioFuncionario,TrabalhaPara=estabelecimento};
+
+            await this.context.Funcionarios.AddAsync(novoFuncionario);
+            await this.context.SaveChangesAsync();
+            return novoFuncionario;
+        }
+
+        private async Task<int> CriarServico(CriarUsuarioComServicoDto criarUsuarioComServicoDto)
+        {
+            Servico servicoFun = new Servico{Nome=criarUsuarioComServicoDto.NomeServico,
+                                            TempoDeDuracao=criarUsuarioComServicoDto.TempoDeDuracao,
+                                            Valor=criarUsuarioComServicoDto.Valor};
+            await this.context.Servicos.AddAsync(servicoFun);
+            await this.context.SaveChangesAsync();
+            return servicoFun.Id;
         }
     }
 }
