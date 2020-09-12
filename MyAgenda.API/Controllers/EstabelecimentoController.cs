@@ -87,11 +87,8 @@ namespace MyAgenda.API.Controllers
         [HttpPost("funcionario/novo")]
         public async Task<IActionResult> NovoFuncionario([FromBody] CriarUsuarioComServicoDto criarUsuarioComServicoDto)
         {
-            //System.Console.WriteLine(criarUsuarioComServicoDto.NomeServico+" "+criarUsuarioComServicoDto.);
-            // int servicoId = await CriarServico(criarUsuarioComServicoDto);
-            //int funcuionarioId = await CriarFuncionario(criarUsuarioComServicoDto);
             var FuncionarioServico = await CriarfuncionarioServico(criarUsuarioComServicoDto);
-            //await this.CriarFuncionarioDeEstabelecimento(criarUsuarioComServicoDto);
+            await AfiliarEstabelecimentoServico(FuncionarioServico.Funcoes.ToArray()[0].ServicoId, criarUsuarioComServicoDto.EstabelecimentoId);
 
             return StatusCode(201);
         }
@@ -179,13 +176,30 @@ namespace MyAgenda.API.Controllers
                                             Valor=criarUsuarioComServicoDto.Valor};
             var usuarioFuncionario = await this.context.Usuarios.FirstOrDefaultAsync(x => x.Email == criarUsuarioComServicoDto.UsurioEmail);
             var estabelecimento = await this.context.Estabelecimentos.FirstOrDefaultAsync(x => x.Id == criarUsuarioComServicoDto.EstabelecimentoId);
+            //estabelecimento.Servicos.Add(servicoFun);
             Funcionario novoFuncionario = new Funcionario{Activo=true,Conta=usuarioFuncionario,TrabalhaPara=estabelecimento};
 
-            novoFuncionario.Funcoes = new List<FuncionarioServico>{new FuncionarioServico{Servico = servicoFun, Funcionario = novoFuncionario}};
+             novoFuncionario.Funcoes = new List<FuncionarioServico>{new FuncionarioServico{Servico = servicoFun, Funcionario = novoFuncionario}};
+            //novoFuncionario.Funcoes.Add(new FuncionarioServico{Servico = servicoFun, Funcionario = novoFuncionario});
             await this.context.Funcionarios.AddAsync(novoFuncionario);
             await this.context.SaveChangesAsync();
             
-            return null;
+            return novoFuncionario;
+        }
+
+        private async Task<Estabelecimento>  AfiliarEstabelecimentoServico(int servicoId, int estabelecimentoId)
+        {
+            //System.Console.WriteLine( servicoId+ " " + estabelecimentoId);
+            var estabelecimento = await this.context.Estabelecimentos.FirstOrDefaultAsync(x => x.Id == estabelecimentoId);
+            var servico = await this.context.Servicos.FirstOrDefaultAsync(x => x.Id == servicoId);
+            if (estabelecimento.Servicos == null)
+            {
+                estabelecimento.Servicos = new List<Servico>{servico};
+            }else{
+                estabelecimento.Servicos.Add(servico);
+            }
+            context.SaveChanges();
+            return estabelecimento;
         }
 
         private async Task<Funcionario>  CriarFuncionario(CriarUsuarioComServicoDto criarUsuarioComServicoDto)
