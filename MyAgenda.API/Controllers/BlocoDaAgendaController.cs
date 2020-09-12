@@ -43,6 +43,26 @@ namespace MyAgenda.API.Controllers
             return Ok(new{ usuariosBlocosDaAgenda = usuarioRep});
         }
 
+        // [AllowAnonymous]
+        // [HttpPost("novo")]
+        // public async Task<IActionResult> Novo([FromBody] CriarBlocoDaAgendaDto criarBlocoDaAgendaDto)
+        // {
+        //     // System.Console.WriteLine(estabelecimentoDto);
+        //     // if (await EstabelecimentoNome(estabelecimentoDto.Nome) != null)
+        //     // {
+        //     //     return BadRequest("Estabelecimento com este nome já foi cadastrado");
+        //     // }
+        //     // var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+        //     // if (userId == null || userId == "")
+        //     // {
+        //     //     return BadRequest("Erro, porblema com token - Id não encontrado");
+        //     // }
+        //     // //System.Console.WriteLine(usuarioParaRegistroDto.Nome);
+        //     // await this.CriarEstabelecimento(estabelecimentoDto,int.Parse(userId));
+
+        //     return StatusCode(201);
+        // }
+
         /////////////////////// TODO: Raios que o partam do repositorio nao quer funcionar, ver isso depos //////////////////////////////
         public IQueryable<UsuarioBlocoDaAgenda> GetAllUsuariosBlocosDaAgenda(){
             return this.context.UsuariosBlocosDaAgenda.AsQueryable(); 

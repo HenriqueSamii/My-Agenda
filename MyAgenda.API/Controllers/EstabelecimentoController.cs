@@ -54,10 +54,12 @@ namespace MyAgenda.API.Controllers
             }
             return Ok(new{ estabelecimentoPorId = usuarioRep});
         }
+
+        [AllowAnonymous]
         [HttpGet("{nome}")]
         public async Task<IActionResult> EstabelecimentoPorNome(string nome)
         {
-            var usuarioRep = await EstabelecimentoNome(nome);
+            var usuarioRep = await EstabelecimentoNomeCompleto(nome);
             if (usuarioRep == null)
             {
                 return BadRequest("Erro, estabelecimento nao existe");
@@ -83,7 +85,7 @@ namespace MyAgenda.API.Controllers
 
             return StatusCode(201);
         }
-        [AllowAnonymous]
+        
         [HttpPost("funcionario/novo")]
         public async Task<IActionResult> NovoFuncionario([FromBody] CriarUsuarioComServicoDto criarUsuarioComServicoDto)
         {
@@ -109,6 +111,16 @@ namespace MyAgenda.API.Controllers
             return x;
         }
 
+        public async Task<Estabelecimento> EstabelecimentoNomeCompleto(string nome)
+        {
+            var x = await this.context.Estabelecimentos
+                        .Include(i => i.Servicos)
+                            .ThenInclude(i => i.Prestadores)
+                            .ThenInclude(i => i.Funcionario)
+                            .ThenInclude(i => i.Conta)
+                        .FirstOrDefaultAsync(x => x.Nome == nome); 
+            return x;
+        }
         public async Task<Estabelecimento> EstabelecimentoId(int id)
         {
             var x = await this.context.Estabelecimentos.FirstOrDefaultAsync(x => x.Id == id); 
@@ -131,43 +143,6 @@ namespace MyAgenda.API.Controllers
             await this.context.SaveChangesAsync();
             return x;
         }
-
-        // public async Task<Estabelecimento> CriarFuncionarioDeEstabelecimento(CriarUsuarioComServicoDto criarUsuarioComServicoDto)
-        // {
-        //     int servicoId = await CriarServico(criarUsuarioComServicoDto);
-        //     //int funcuionarioId = await CriarFuncionario(criarUsuarioComServicoDto);
-        //     //var funcionarioServico = await CriarfuncionarioServico(servicoId,funcuionarioId);
-
-        //     //FuncionarioServico funcionarioServico = CriarfuncionarioServico(criarUsuarioComServicoDto).Result;
-
-        //     //var usuarioFuncionario = await this.context.Usuarios.FirstOrDefaultAsync(x => x.Email == criarUsuarioComServicoDto.UsurioEmail);
-        //     var estabelecimento = await this.context.Estabelecimentos.FirstOrDefaultAsync(x => x.Id == criarUsuarioComServicoDto.EstabelecimentoId);
-        //     //var servicoFun = await this.context.Servicos.FirstOrDefaultAsync(x => x.Id == servicoId);
-        //     //var novoFuncionario = await this.context.Funcionarios.FirstOrDefaultAsync(x => x.Id == funcuionarioId);
-
-        //     //servicoFun.Prestadores.Add(funcionarioServico);
-        //     //novoFuncionario.Funcoes.Add(funcionarioServico);
-            
-        //     // await this.context.Servicos.AddAsync(servicoFun);
-        //     // await this.context.Funcionarios.AddAsync(novoFuncionario);
-
-        //     // servicoFun = await this.context.Servicos.FirstOrDefaultAsync(x => x.Id == servicoFun.Id);
-        //     // novoFuncionario = await this.context.Funcionarios.FirstOrDefaultAsync(x => x.Id == novoFuncionario.Id);
-
-        //     // FuncionarioServico funcionarioServico = new FuncionarioServico{Servico = servicoFun, Funcionario = novoFuncionario};
-        //     // await this.context.Funcionarios.AddAsync(novoFuncionario);
-            
-        //     // await this.context.SaveChangesAsync();
-
-        //     // novoFuncionario.Funcoes.Add(funcionarioServico);
-        //     // servicoFun.Prestadores.Add(funcionarioServico);
-
-        //     //usuarioFuncionario.FuncionarioDe.Add(novoFuncionario);
-        //     //estabelecimento.Funcionarios.Add(novoFuncionario);
-        //     //estabelecimento.Servicos.Add(servicoFun);
-        //     //await this.context.SaveChangesAsync();
-        //     return estabelecimento;
-        // }
 
         private async Task<Funcionario> CriarfuncionarioServico(CriarUsuarioComServicoDto criarUsuarioComServicoDto)
         {

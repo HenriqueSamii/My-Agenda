@@ -102,7 +102,7 @@ export default {
 };
 </script>
 <style>
-#loginECreate {
+#criarFuncionario {
   width: 60%;
   float: none;
   margin: 0 auto;
