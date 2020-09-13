@@ -50,7 +50,7 @@ namespace MyAgenda.API.Controllers
         public async Task<IActionResult> Novo([FromBody] CriarBlocoDaAgendaDto criarBlocoDaAgendaDto)
         {
             var blocoAgenda = await this.CriarBlocoDaAgenda(criarBlocoDaAgendaDto);
-            // await this.LigarBlocoDaAgenda(criarBlocoDaAgendaDto,blocoAgenda);
+            await this.LigarBlocoDaAgendaEstabelecimento(criarBlocoDaAgendaDto.EstabelecimentoId,blocoAgenda.Id);
 
             return StatusCode(201);
         }
@@ -111,6 +111,23 @@ namespace MyAgenda.API.Controllers
             // }
             // await this.context.SaveChangesAsync();
             return novoBloco;
+        }
+
+        private  async Task<Estabelecimento> LigarBlocoDaAgendaEstabelecimento(int estabelecimentoId, int blocoAgendaId)
+        {
+            var local = await this.context.Estabelecimentos.Include(i => i.Agenda).FirstOrDefaultAsync(x => x.Id == estabelecimentoId);
+            var blocoA = await this.context.BlocosDaAgenda.FirstOrDefaultAsync(x => x.Id == blocoAgendaId);
+            //System.Console.WriteLine(local.Agenda);
+            if (local.Agenda == null)
+            {
+                local.Agenda  =new List<BlocoDaAgenda>{blocoA};
+            }
+            else
+            {
+                local.Agenda.Add(blocoA);   
+            }
+            await this.context.SaveChangesAsync();
+            return local;
         }
     }
 }

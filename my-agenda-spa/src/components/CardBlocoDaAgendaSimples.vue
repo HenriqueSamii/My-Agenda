@@ -5,11 +5,12 @@
       <div class="card-body">
         <p class="card-text sideText">Cliente: {{this.agendaContent.usuario.email}} - {{this.agendaContent.usuario.username}}</p>
         <p class="card-text sideText">Prestador: {{this.agendaContent.blocoDaAgenda.prestadores[0].conta.email}} - {{this.agendaContent.blocoDaAgenda.prestadores[0].conta.username}}</p>
-        <p class="card-text sideText">Local: {{this.agendaContent.blocoDaAgenda.local.nome}}</p>
-        <!-- <p class="card-text sideText">Duração: {{this.BlocoDaAgenda.Servicos}}</p> -->
-        <p class="card-text mainText">{{this.agendaContent.BlocoDaAgenda.servicos[0].nome}}
-          <br>Valor: {{this.agendaContent.BlocoDaAgenda.servicos[0].valor}}R$ 
-          <br>Duracao: {{this.agendaContent.BlocoDaAgenda.servicos[0].duracao}} min.</p>
+        <p class="card-text sideText"  v-if="this.agendaContent.blocoDaAgenda.servicos != null">
+          Local: {{this.agendaContent.blocoDaAgenda.local.nome}}</p>
+        <p class="card-text mainText"  v-if="this.agendaContent.blocoDaAgenda.servicos != null">
+          {{this.agendaContent.blocoDaAgenda.servicos[0].nome}}
+          <br>Valor: {{this.agendaContent.blocoDaAgenda.servicos[0].valor}}R$ 
+          <br>Duracao: {{this.agendaContent.blocoDaAgenda.servicos[0].duracao}} min.</p>
       </div>
       <!-- <dir class="butoesDiv">
         <button v-if="this.agendaContent.corpo != '' || this.agendaContent.corpo != null"

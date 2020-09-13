@@ -59,7 +59,7 @@ export default {
       //estabelecimetoServicos: [],
       ClienteEmailV: "",
       dateTime: "",
-      EstabelecimentoId: 0,
+      //EstabelecimentoId: 0,
       servio: {},
       options: [],
     };
@@ -104,7 +104,7 @@ export default {
           clienteEmail: this.ClienteEmailV,
           funcionarioId: this.servio.FuncionarioId,
           servicoId: this.servio.ServicoId,
-          estabelecimentoId: this.EstabelecimentoId,
+          estabelecimentoId: this.estabelecimeto.id,
           inicio: this.dateTime+":00,531",
         };
         console.log(retorno)

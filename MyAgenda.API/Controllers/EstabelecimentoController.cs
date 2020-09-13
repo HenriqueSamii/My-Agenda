@@ -43,7 +43,7 @@ namespace MyAgenda.API.Controllers
             var usuarioRep = await EstabelecimentosDeUsuarioLogado(int.Parse(userId));
             return Ok(new{ usuariosBlocosDaAgenda = usuarioRep});
         }
-        //[AllowAnonymous]
+        [AllowAnonymous]
         [HttpGet("agenda/{numero}")]
         public async Task<IActionResult> EstabelecimentoPorId(int numero)
         {
@@ -123,7 +123,9 @@ namespace MyAgenda.API.Controllers
         }
         public async Task<Estabelecimento> EstabelecimentoId(int id)
         {
-            var x = await this.context.Estabelecimentos.FirstOrDefaultAsync(x => x.Id == id); 
+            var x = await this.context.Estabelecimentos
+                                .Include(i => i.Agenda)
+                                .FirstOrDefaultAsync(x => x.Id == id); 
             return x;
         }
 
