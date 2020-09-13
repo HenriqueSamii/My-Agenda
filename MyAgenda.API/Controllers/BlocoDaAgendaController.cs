@@ -45,12 +45,29 @@ namespace MyAgenda.API.Controllers
             return Ok(new{ usuariosBlocosDaAgenda = usuarioRep});
         }
 
+        // [HttpGet("funcionario/home")]
+        // public async Task<IActionResult> FuncionarioHome()
+        // {
+        //     // var claimsIdentity = this.User.Identity as ClaimsIdentity;
+        //     // ClaimsPrincipal currentUser = this.User;
+        //     var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+        //     if (userId == null || userId == "")
+        //     {
+        //         return BadRequest("Erro, porblema com token - Id não encontrado");
+        //     }
+
+        //     var usuarioRep = await AgendaDeUsuarioLogadoAgendaFuncinario(int.Parse(userId));
+        //     return Ok(new{ usuariosBlocosDaAgenda = usuarioRep});
+        // }
+
         [AllowAnonymous]
         [HttpPost("novo")]
         public async Task<IActionResult> Novo([FromBody] CriarBlocoDaAgendaDto criarBlocoDaAgendaDto)
         {
             var blocoAgenda = await this.CriarBlocoDaAgenda(criarBlocoDaAgendaDto);
             await this.LigarBlocoDaAgendaEstabelecimento(criarBlocoDaAgendaDto.EstabelecimentoId,blocoAgenda.Id);
+            await this.LigarBlocoDaAgendaCliente(blocoAgenda.Id);
+            // await this.LigarBlocoDaAgendaFuncionario(criarBlocoDaAgendaDto.FuncionarioId,blocoAgenda.Id);
 
             return StatusCode(201);
         }
@@ -71,9 +88,27 @@ namespace MyAgenda.API.Controllers
                                     .ThenInclude(i => i.Servicos)
                                 .Include(i => i.BlocoDaAgenda)
                                     .ThenInclude(i => i.Local)
-                                .Where(x => x.UsuarioId == id).ToListAsync(); 
+                                .Include(i => i.BlocoDaAgenda)
+                                    .ThenInclude(i => i.Clientes)
+                                .Where(x => x.UsuarioId == id || x.BlocoDaAgenda.Prestadores.ToList().Any(i=> i.Conta.Id == id)).ToListAsync(); 
             return x;
         }
+        // public async Task<ICollection<UsuarioBlocoDaAgenda>> AgendaDeUsuarioLogadoAgendaFuncinario(int id)
+        // {
+        //     var x = await GetAllUsuariosBlocosDaAgenda()
+        //                         .Include(i => i.Usuario)
+        //                         .Include(i => i.BlocoDaAgenda)
+        //                             .ThenInclude(i => i.Prestadores)
+        //                             .ThenInclude(i => i.Conta)
+        //                         .Include(i => i.BlocoDaAgenda)
+        //                             .ThenInclude(i => i.Servicos)
+        //                         .Include(i => i.BlocoDaAgenda)
+        //                             .ThenInclude(i => i.Local)
+        //                         .Include(i => i.BlocoDaAgenda)
+        //                             .ThenInclude(i => i.Clientes)
+        //                         .Where(x => x.BlocoDaAgenda.Prestadores.ToList().Any(i=> i.Conta.Id == id)).ToListAsync(); 
+        //     return x;
+        // }
 
         public async Task<BlocoDaAgenda> CriarBlocoDaAgenda(CriarBlocoDaAgendaDto criarBlocoDaAgendaDto)
         {
@@ -94,8 +129,7 @@ namespace MyAgenda.API.Controllers
                                                         // Clientes = new List<UsuarioBlocoDaAgenda>()
                                                         };
             novoBloco.Clientes = new List<UsuarioBlocoDaAgenda>{
-                                    new UsuarioBlocoDaAgenda{Usuario = usuarioCliente,BlocoDaAgenda= novoBloco},
-                                    new UsuarioBlocoDaAgenda{Usuario = funcionarioPrestador.Conta,BlocoDaAgenda= novoBloco}
+                                    new UsuarioBlocoDaAgenda{Usuario = usuarioCliente,BlocoDaAgenda= novoBloco}
                                 };
             
             await this.context.BlocosDaAgenda.AddAsync(novoBloco);
@@ -129,5 +163,29 @@ namespace MyAgenda.API.Controllers
             await this.context.SaveChangesAsync();
             return local;
         }
+
+        private async Task<BlocoDaAgenda> LigarBlocoDaAgendaCliente(int blocoAgendaId)
+        {
+            //var usuarioCliente = await this.context.Usuarios.Include(i=>i.Agenda).FirstOrDefaultAsync(x => x.Email == clienteEmail);
+            var blocoA = await this.context.BlocosDaAgenda.Include(i => i.Clientes).ThenInclude(i=>i.Usuario).FirstOrDefaultAsync(x => x.Id == blocoAgendaId);
+            foreach (var item in blocoA.Clientes)
+            {
+                item.Usuario.Agenda.Add(item);
+            }
+            //usuarioCliente.Agenda.Add(blocoA.Clientes)
+            await this.context.SaveChangesAsync();
+            return blocoA;
+        }
+        // private async Task<Usuario> LigarBlocoDaAgendaFuncionario(int funcionarioId, int blocoAgendaId)
+        // {
+        //     var funcionarioPrestador = await this.context.Funcionarios
+        //                                     .Include(i => i.Conta)
+        //                                     .ThenInclude(i => i.Agenda)
+        //                                     .FirstOrDefaultAsync(x => x.Id == funcionarioId);
+        //     var blocoA = await this.context.BlocosDaAgenda.Include(i => i.Clientes).FirstOrDefaultAsync(x => x.Id == blocoAgendaId);
+        //     funcionarioPrestador.Conta.Agenda.Add(blocoA.Clientes.ToList[0])
+        //     await this.context.SaveChangesAsync();
+        //     return funcionarioPrestador.Conta;
+        // }
     }
 }
