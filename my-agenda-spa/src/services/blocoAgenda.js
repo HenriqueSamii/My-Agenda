@@ -9,4 +9,7 @@ export default {
             }
          })
     },
+    criar:(blocoDetalhes) => {
+        return axios.post(localhost+'BlocoDaAgenda/novo',blocoDetalhes)
+    },
 }

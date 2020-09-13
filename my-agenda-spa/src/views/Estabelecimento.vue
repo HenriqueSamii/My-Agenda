@@ -81,7 +81,7 @@ export default {
           optionHolder.push({
             value: {
               ServicoId: item.id,
-              FuncionarioId: item.prestadores[0].funcionario.conta.id,
+              FuncionarioId: item.prestadores[0].funcionario.id,
             },
             text: `Servico: ${item.nome} - Prestador: ${item.prestadores[0].funcionario.conta.username} - Tempo: ${item.tempoDeDuracao} min. - Custo: ${item.valor}R$`,
           });
@@ -100,14 +100,26 @@ export default {
   },
   methods: {
     metodoMarcarBlocoDaAgenda: function () {
-      //   var retorno = {
-      //     ClienteEmail: this.ClienteEmailV,
-      //     FuncionarioId: this.servio.FuncionarioId,
-      //     ServicoId: this.servio.ServicoId,
-      //     EstabelecimentoId: this.EstabelecimentoId,
-      //     inicio: this.dateTime+":00,531",
-      //   };
-      BolcoAg;
+        var retorno = {
+          clienteEmail: this.ClienteEmailV,
+          funcionarioId: this.servio.FuncionarioId,
+          servicoId: this.servio.ServicoId,
+          estabelecimentoId: this.EstabelecimentoId,
+          inicio: this.dateTime+":00,531",
+        };
+        console.log(retorno)
+      BolcoAg.criar(retorno).then((reason) =>{
+        this.erro = "Agendado com sucesso";
+        console.log(reason);
+      })
+      .catch((reason) => {
+        if (reason.status === 400) {
+          this.erro = "Dados inorrectos, tente novamente" + reason.message;
+        } else {
+          this.erro = "Erro interno, tente mais tarde " + reason.message;
+        }
+        console.log(reason.message);
+      });
     },
     // myFunction: function (item, index) {
     //   this.options.push(

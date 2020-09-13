@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
@@ -6,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MyAgenda.API.Data.Class;
+using MyAgenda.API.Dtos;
 using MyAgenda.API.Models.Class;
 
 namespace MyAgenda.API.Controllers
@@ -43,25 +45,15 @@ namespace MyAgenda.API.Controllers
             return Ok(new{ usuariosBlocosDaAgenda = usuarioRep});
         }
 
-        // [AllowAnonymous]
-        // [HttpPost("novo")]
-        // public async Task<IActionResult> Novo([FromBody] CriarBlocoDaAgendaDto criarBlocoDaAgendaDto)
-        // {
-        //     // System.Console.WriteLine(estabelecimentoDto);
-        //     // if (await EstabelecimentoNome(estabelecimentoDto.Nome) != null)
-        //     // {
-        //     //     return BadRequest("Estabelecimento com este nome já foi cadastrado");
-        //     // }
-        //     // var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-        //     // if (userId == null || userId == "")
-        //     // {
-        //     //     return BadRequest("Erro, porblema com token - Id não encontrado");
-        //     // }
-        //     // //System.Console.WriteLine(usuarioParaRegistroDto.Nome);
-        //     // await this.CriarEstabelecimento(estabelecimentoDto,int.Parse(userId));
+        [AllowAnonymous]
+        [HttpPost("novo")]
+        public async Task<IActionResult> Novo([FromBody] CriarBlocoDaAgendaDto criarBlocoDaAgendaDto)
+        {
+            var blocoAgenda = await this.CriarBlocoDaAgenda(criarBlocoDaAgendaDto);
+            // await this.LigarBlocoDaAgenda(criarBlocoDaAgendaDto,blocoAgenda);
 
-        //     return StatusCode(201);
-        // }
+            return StatusCode(201);
+        }
 
         /////////////////////// TODO: Raios que o partam do repositorio nao quer funcionar, ver isso depos //////////////////////////////
         public IQueryable<UsuarioBlocoDaAgenda> GetAllUsuariosBlocosDaAgenda(){
@@ -70,8 +62,55 @@ namespace MyAgenda.API.Controllers
 
         public async Task<ICollection<UsuarioBlocoDaAgenda>> AgendaDeUsuarioLogado(int id)
         {
-            var x = await GetAllUsuariosBlocosDaAgenda().Where(x => x.UsuarioId == id).ToListAsync(); 
+            var x = await GetAllUsuariosBlocosDaAgenda()
+                                .Include(i => i.Usuario)
+                                .Include(i => i.BlocoDaAgenda)
+                                    .ThenInclude(i => i.Prestadores)
+                                    .ThenInclude(i => i.Conta)
+                                .Include(i => i.BlocoDaAgenda)
+                                    .ThenInclude(i => i.Servicos)
+                                .Include(i => i.BlocoDaAgenda)
+                                    .ThenInclude(i => i.Local)
+                                .Where(x => x.UsuarioId == id).ToListAsync(); 
             return x;
+        }
+
+        public async Task<BlocoDaAgenda> CriarBlocoDaAgenda(CriarBlocoDaAgendaDto criarBlocoDaAgendaDto)
+        {
+            DateTime myDate = DateTime.ParseExact(criarBlocoDaAgendaDto.Inicio, "dd-MM-yyyy HH:mm:ss,fff",
+                                       System.Globalization.CultureInfo.InvariantCulture);
+
+            var usuarioCliente = await this.context.Usuarios.FirstOrDefaultAsync(x => x.Email == criarBlocoDaAgendaDto.ClienteEmail);
+            var funcionarioPrestador = await this.context.Funcionarios.Include(i => i.Conta).FirstOrDefaultAsync(x => x.Id == criarBlocoDaAgendaDto.FuncionarioId);
+            var local = await this.context.Estabelecimentos.Include(i => i.Agenda).FirstOrDefaultAsync(x => x.Id == criarBlocoDaAgendaDto.FuncionarioId);
+            var servicoPrestado = await this.context.Servicos.FirstOrDefaultAsync(x => x.Id == criarBlocoDaAgendaDto.ServicoId);
+
+
+            BlocoDaAgenda novoBloco = new BlocoDaAgenda{Comeco = myDate,
+                                                        Cancelado = false,
+                                                        Servicos = new List<Servico>{servicoPrestado},
+                                                        Local = local,
+                                                        Prestadores = new List<Funcionario>{funcionarioPrestador},
+                                                        // Clientes = new List<UsuarioBlocoDaAgenda>()
+                                                        };
+            novoBloco.Clientes = new List<UsuarioBlocoDaAgenda>{
+                                    new UsuarioBlocoDaAgenda{Usuario = usuarioCliente,BlocoDaAgenda= novoBloco},
+                                    new UsuarioBlocoDaAgenda{Usuario = funcionarioPrestador.Conta,BlocoDaAgenda= novoBloco}
+                                };
+            
+            await this.context.BlocosDaAgenda.AddAsync(novoBloco);
+            await this.context.SaveChangesAsync();
+            //System.Console.WriteLine(local.Agenda);
+            // if (local.Agenda == null)
+            // {
+            //     local.Agenda  =new List<BlocoDaAgenda>{novoBloco};
+            // }
+            // else
+            // {
+            //     local.Agenda.Add(novoBloco);   
+            // }
+            // await this.context.SaveChangesAsync();
+            return novoBloco;
         }
     }
 }

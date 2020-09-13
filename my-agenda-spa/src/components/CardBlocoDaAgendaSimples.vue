@@ -1,16 +1,18 @@
 <template>
   <div class="container">
     <div class="card">
-      <h2 class="card-title">Data: {{this.agendaContent.BlocoDaAgenda.Comeco}}</h2>
+      <h2 class="card-title">Data: {{this.agendaContent.blocoDaAgenda.comeco}}</h2>
       <div class="card-body">
-        <p class="card-text sideText">Cliente: {{usuarioById(this.agendaContent.Usuario.Email)}}</p>
-        <p class="card-text sideText">Prestador: {{usuarioById(this.agendaContent.BlocoDaAgenda.Prestadores[0].Conta.Email)}}</p>
-        <p class="card-text sideText">Local: {{this.agendaContent.BlocoDaAgenda.Local.Nome}}</p>
+        <p class="card-text sideText">Cliente: {{this.agendaContent.usuario.email}} - {{this.agendaContent.usuario.username}}</p>
+        <p class="card-text sideText">Prestador: {{this.agendaContent.blocoDaAgenda.prestadores[0].conta.email}} - {{this.agendaContent.blocoDaAgenda.prestadores[0].conta.username}}</p>
+        <p class="card-text sideText">Local: {{this.agendaContent.blocoDaAgenda.local.nome}}</p>
         <!-- <p class="card-text sideText">Duração: {{this.BlocoDaAgenda.Servicos}}</p> -->
-        <p class="card-text mainText" v-if="this.agendaContent.corpo != '' || this.agendaContent.corpo != null">{{this.BlocoDaAgenda.Servicos}}</p>
+        <p class="card-text mainText">{{this.agendaContent.BlocoDaAgenda.servicos[0].nome}}
+          <br>Valor: {{this.agendaContent.BlocoDaAgenda.servicos[0].valor}}R$ 
+          <br>Duracao: {{this.agendaContent.BlocoDaAgenda.servicos[0].duracao}} min.</p>
       </div>
       <!-- <dir class="butoesDiv">
-        <button
+        <button v-if="this.agendaContent.corpo != '' || this.agendaContent.corpo != null"
           class="btn btn-danger btnDeletar"
           type="button"
           v-on:click="cancelarBloco"
@@ -23,7 +25,7 @@
 <script>
 // import { mapGetters} from "vuex";
 export default {
-  name: "loginECreate",
+  name: "home",
   props: {
     agendaContent: Object
   },

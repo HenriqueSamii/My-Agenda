@@ -1,6 +1,6 @@
 <template>
   <div id="criarFuncionario">
-    <h1>Novo Estabelecimeno</h1>
+    <h1>Novo Funcionario</h1>
     <p v-if="erro != '' || erro != null">{{erro}}</p>
     <form v-on:submit.prevent="metodoCriarEstabelecimento">
       <div class="form-group">
