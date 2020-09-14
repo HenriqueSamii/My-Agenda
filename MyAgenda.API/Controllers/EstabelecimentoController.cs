@@ -43,7 +43,7 @@ namespace MyAgenda.API.Controllers
             var usuarioRep = await EstabelecimentosDeUsuarioLogado(int.Parse(userId));
             return Ok(new{ usuariosBlocosDaAgenda = usuarioRep});
         }
-        [AllowAnonymous]
+        //[AllowAnonymous]
         [HttpGet("agenda/{numero}")]
         public async Task<IActionResult> EstabelecimentoPorId(int numero)
         {
@@ -52,7 +52,8 @@ namespace MyAgenda.API.Controllers
             {
                 return BadRequest("Erro, porblema com estabelecimento - Id não encontrado");
             }
-            return Ok(new{ estabelecimentoPorId = usuarioRep});
+            var estAgenda = await EstabelecimentoIdAgenda(numero);
+            return Ok(new{ estabelecimentoPorId = usuarioRep, estabelecimentoAgenda = estAgenda});
         }
 
         [AllowAnonymous]
@@ -126,6 +127,25 @@ namespace MyAgenda.API.Controllers
             var x = await this.context.Estabelecimentos
                                 .Include(i => i.Agenda)
                                 .FirstOrDefaultAsync(x => x.Id == id); 
+            return x;
+        }
+        public IQueryable<UsuarioBlocoDaAgenda> GetAllUsuariosBlocosDaAgenda(){
+            return this.context.UsuariosBlocosDaAgenda.AsQueryable(); 
+        }
+        public async Task<ICollection<UsuarioBlocoDaAgenda>> EstabelecimentoIdAgenda(int id)
+        {
+            var x = await GetAllUsuariosBlocosDaAgenda()
+                                .Include(i => i.Usuario)
+                                .Include(i => i.BlocoDaAgenda)
+                                    .ThenInclude(i => i.Prestadores)
+                                    .ThenInclude(i => i.Conta)
+                                .Include(i => i.BlocoDaAgenda)
+                                    .ThenInclude(i => i.Servicos)
+                                .Include(i => i.BlocoDaAgenda)
+                                    .ThenInclude(i => i.Local)
+                                .Include(i => i.BlocoDaAgenda)
+                                    .ThenInclude(i => i.Clientes)
+                                .Where(x => x.BlocoDaAgenda.Local.Id == id).ToListAsync();
             return x;
         }
 

@@ -8,7 +8,7 @@
       <b-collapse id="nav-collapse" is-nav>
         <b-navbar-nav v-if="isUsuarioLogado">
           <router-link tag="b-nav-item" :to="{name:'Home'}">Home</router-link>
-          <router-link tag="b-nav-item" :to="{name:'Afiliacoes'}">Minhas Afiliações</router-link>
+          <!-- <router-link tag="b-nav-item" :to="{name:'Afiliacoes'}">Minhas Afiliações</router-link> -->
           <router-link tag="b-nav-item" :to="{name:'MeusEstabelecimentos'}">Meus Estabelecimentos</router-link>
         </b-navbar-nav>
 

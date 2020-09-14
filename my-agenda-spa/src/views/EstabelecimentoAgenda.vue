@@ -1,5 +1,5 @@
 <template>
-  <div id="EstabelecimentoAgenda">
+  <div style="padding-top: 2em;" id="EstabelecimentoAgenda">
     <h1>{{this.nome}}</h1>
       <h2 v-if=" this.agendaUsu == null || this.agendaUsu.lenght == 0">Não tem nenhum item agendado</h2>
     <div class="cardList">
@@ -25,17 +25,9 @@ export default {
     ...mapGetters(["usuarioKey"])
   },
   mounted(){
-      //console.log({numero:this.$route.params.id})
     EstabelecimentoBlocosDaAgenda.estabelecimentosPorId(this.usuarioKey,this.$route.params.id).then((result) => {
-      var agendaOrdenadada = result.data['estabelecimentoPorId']
-      this.nome = agendaOrdenadada['nome']
-      this.agendaUsu = agendaOrdenadada['agenda'];
-      console.log(agendaOrdenadada)
-    //   function custom_sort(a, b) {
-    //     return new Date(a.BlocoDaAgenda.Comeco).getTime() - new Date(b.BlocoDaAgenda.Comeco).getTime();
-    //   }
-
-    //   this.agendaUsu = agendaOrdenadada.sort(custom_sort);
+      this.nome = result.data['estabelecimentoPorId'].nome
+      this.agendaUsu = result.data['estabelecimentoAgenda']; 
     }).catch((err) => {
       console.log(err)
     });
@@ -46,7 +38,7 @@ export default {
 };
 </script>
 <style>
-.criar{
-  margin: 0.5em;
-}
+/* #EstabelecimentoAgenda{
+  margin-top: 2em;
+} */
 </style>
